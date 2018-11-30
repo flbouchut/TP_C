@@ -18,10 +18,14 @@ int main(){
     int tab_proposition[NB_COLONNES];
     int plateau[10][NB_COLONNES + 2];
 
-    int width = 800;
-    int height = 600;
+    int width = 600;
+    int height = 800;
     int running = 1;
     SDL_Event event;
+    SDL_Rect rect;
+    SDL_Window *window;
+    SDL_Renderer *renderer;
+    SDL_Texture  *avatar;
 
     int flags=IMG_INIT_JPG|IMG_INIT_PNG;
     int initted= 0;
@@ -44,7 +48,7 @@ int main(){
     }
 
 
-    SDL_Window *window;
+    
 
     window = SDL_CreateWindow("SDL2 Programme 0.1", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height,SDL_WINDOW_RESIZABLE);
 
@@ -57,7 +61,57 @@ int main(){
     
     initialiser_plateau(plateau);
 
+    
+
+    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED ); /*  SDL_RENDERER_SOFTWARE */
+    if (renderer == 0) {
+         fprintf(stderr, "Erreur d'initialisation de la SDL : %s\n", SDL_GetError());
+        /* faire ce qu'il faut pour quitter proprement */
+    }
+
+    /*SDL_Surface *image = NULL;
+    image=IMG_Load("loic.png");*/
+    /* image=SDL_LoadBMP("loic.bmp"); fonction standard de la SDL2 */
+    /*if(!image) {
+        printf("IMG_Load: %s\n", IMG_GetError());
+    }
+
+    avatar = SDL_CreateTextureFromSurface(renderer, image);
+    SDL_FreeSurface(image);
+
+    rect.x = 600;
+    rect.y = 110;
+    rect.w = rect.h = 128;
+    SDL_RenderCopy(renderer, avatar, NULL, &rect);*/
+
     while (running){
+
+        SDL_SetRenderDrawColor(renderer, 255, 255, 255, 0);
+        SDL_RenderClear(renderer);
+
+        SDL_SetRenderDrawColor(renderer, 0, 255, 255, 0);
+        rect.x = 100;
+        rect.y = 660;
+        rect.w = 60;
+        rect.h = 40;
+        SDL_RenderFillRect(renderer, &rect );
+
+        SDL_SetRenderDrawColor(renderer, 0, 255, 0, 0);
+        rect.x = 160;
+        rect.y = 660;
+        rect.w = 60;
+        rect.h = 40;
+        SDL_RenderFillRect(renderer, &rect );
+
+        
+
+        /*SDL_SetRenderDrawColor(renderer, 255, 255, 255, 0);
+        rect.x = rect.y = 0;
+        rect.w = rect.h = 600;
+        SDL_RenderFillRect(renderer, &rect );*/
+
+
+
         while (SDL_PollEvent(&event)){
             switch(event.type){
                 case SDL_WINDOWEVENT:
@@ -84,6 +138,7 @@ int main(){
                     break;
             }
         }
+        SDL_RenderPresent(renderer);
         SDL_Delay(1); //  delai minimal
     }
     
@@ -120,7 +175,7 @@ int main(){
         stop = 1;
     }*/
 
-
+    SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     SDL_Quit();
     TTF_Quit();
